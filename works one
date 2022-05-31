@@ -1,0 +1,176 @@
+package homework;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+import java.io.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import java.util.*;
+
+
+public class test extends JPanel implements MouseListener, KeyListener, Runnable {
+	public static int gameState = 0; //game states
+	public static int mouseX; //gets position of x 
+	public static int mouseY; //gets position of y
+	public static int health = 100; // health of player
+	public static int angle = -90; // angle of the rotating object starts at -90 since we need the object to start at the top of the screen, and when I tried
+	//90 it went to the bottom so I tried -90 and it worked so im keeping it at that
+	public static int count = 1; // this variable is to make the object move faster and faster, it is used along counter in order to make the object move faster after a certain ammount of spins
+	public static int counter = 1800; // using count, i subtract counter form count, and since count gets bigger every angle, it will take approxipately, counter/360 spins before the object moves faster
+	BufferedImage menuScreen; //menu screen image
+	BufferedImage image2; //object image(s) but not done yet
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		JFrame myFrame = new JFrame("Test");
+		
+		// Create a panel to put inside the frame
+		test myPanel = new test(); 
+		myFrame.add(myPanel);
+		
+		// Maximize your frame to the size of the panel
+		myFrame.pack();
+		
+		// Set the visibility of the frame to visible
+		myFrame.setVisible(true);	
+		
+		
+	}
+	
+	public test() {
+		setPreferredSize(new Dimension(680,928)); //320, 240   b288.5, 213
+		setBackground(new Color(255,255,255));
+		this.setFocusable(true);
+		addKeyListener(this);
+		try {
+			menuScreen = ImageIO.read(new File("Arrow_Master_1.png"));
+			image2 = ImageIO.read(new File("mario.png"));
+		}
+		catch (Exception e) {
+			System.out.println("no image");
+
+		}
+		addMouseListener(this);
+		Thread thread = new Thread(this);
+		thread.start();
+		//game states
+		//1 menu screen ( menu, cosmetics, keybinds)
+		//2 game screen 
+		//win/lose screen
+	}
+	
+	public static Point getPointOnCircle(int angle, int radius) {
+
+	    // Calculate the outter point of the line
+	    int xPosy = (int) (100 + radius*Math.cos(angle*Math.PI/180));
+	    int yPosy = (int) (100 + radius*Math.sin(angle*Math.PI/180));
+
+	    return new Point(xPosy, yPosy);
+
+	}
+	
+	public void paintComponent(Graphics g)
+	{
+		if (gameState ==0) {
+			g.drawImage(menuScreen, 0, 0, null);
+		}
+		else if (gameState==1) {
+				super.paintComponent(g);
+				//g.drawImage(menuScreen, 0, 0, 800, 800, this);
+				angle-=count;
+				g.drawImage(image2, (int) (288 + 200*Math.cos(angle*Math.PI/180)), (int) (213 + 200*Math.sin(angle*Math.PI/180)), this);
+				counter-=count;
+				if(counter<0) {
+					count++;
+					counter=1800;
+				}
+				
+				
+		}
+		
+		
+	}
+	@Override
+	public void run()
+	{
+		while(true)
+		{
+			repaint();
+			try
+			{	
+				Thread.sleep(16); // The commands after while(true) but before try will execute once every 80 milliseconds
+				if(health < 0) {
+					gameState = 2;
+				}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+		}
+	}
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		mouseX = e.getX();
+		mouseY = e.getY();
+		if (gameState == 0) {
+			if (0 <= mouseX && mouseX <= 680 && 0 <= mouseY && mouseY <= 928) {
+				gameState = 1;
+				paintComponent(this.getGraphics());
+			}
+		}
+ 
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	//x pos is radius * cossine of angle 
+	//y pos is the radius * sine of the angle
+
+}
