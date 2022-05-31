@@ -59,13 +59,13 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 	}
 
 	public arrowhero() {
-		setPreferredSize(new Dimension(1080, 840)); // 320, 240 b288.5, 213
+		setPreferredSize(new Dimension(680,928)); // 320, 240 b288.5, 213
 		setBackground(new Color(255, 255, 255));
 		this.setFocusable(true);
 		addKeyListener(this);
 		try {
 			
-			menuScreen = ImageIO.read(new File("arrowheromenu.png"));
+			menuScreen = ImageIO.read(new File("Arrow_Master_1.png"));
 			images = new BufferedImage [5];
 			images[2] = ImageIO.read(new File("uparrow.png"));
 			images[4] = ImageIO.read(new File("downarrow.png"));
@@ -97,7 +97,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 			for(int i=0; i <arrows.size(); i++) {
 				System.out.println(arrows.get(i).position);
 				arrows.get(i).position -= count;
-				g.drawImage(arrowright, (int) (288 + 200 * Math.cos(arrows.get(i).position * Math.PI / 180)),
+				g.drawImage(images[arrows.get(i).type], (int) (288 + 200 * Math.cos(arrows.get(i).position * Math.PI / 180)),
 						(int) (213 + 200 * Math.sin(arrows.get(i).position * Math.PI / 180)), this);
 
 			}
@@ -126,7 +126,7 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 						spawnTime-=decrease;
 					}
 					time++;
-						if(!arrows.isEmpty()&& arrows.peek().position==-90) {
+						if(!arrows.isEmpty()&& arrows.peek().position==-451) {
 							if(arrows.peek().type == arrow) {
 								score+= scoreAddition;
 								scoreAddition++;
@@ -182,12 +182,11 @@ public class arrowhero extends JPanel implements MouseListener, KeyListener, Run
 		mouseX = e.getX();
 		mouseY = e.getY();
 		if (gameState == 0) {
-			if (0 <= mouseX && mouseX <= 680 && 0 <= mouseY && mouseY <= 480) {
+			if (0 <= mouseX && mouseX <= 680 && 0 <= mouseY && mouseY <= 928) {
 				gameState = 1;
 				paintComponent(this.getGraphics());
 			}
 		}
-
 	}
 
 	@Override
